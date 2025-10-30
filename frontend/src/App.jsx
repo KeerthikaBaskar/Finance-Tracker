@@ -2,10 +2,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
+// ✅ Make sure your .env file has: REACT_APP_API_URL=https://finance-tracker-9n7a.onrender.com/api
 const API_URL = process.env.REACT_APP_API_URL;
 
 function App() {
   const [transactions, setTransactions] = useState([]);
+  const [summary, setSummary] = useState({
+    totalIncome: 0,
+    totalExpense: 0,
+    balance: 0
+  });
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [formData, setFormData] = useState({
     title: '',
     amount: '',
@@ -13,13 +20,8 @@ function App() {
     type: 'expense',
     date: new Date().toISOString().split('T')[0]
   });
-  const [summary, setSummary] = useState({
-    totalIncome: 0,
-    totalExpense: 0,
-    balance: 0
-  });
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
+  // 🔁 Fetch data whenever selected date changes
   useEffect(() => {
     fetchTransactions();
     fetchSummary();
@@ -43,6 +45,11 @@ function App() {
     }
   };
 
+  // ✅ Keep date in sync with form
+  useEffect(() => {
+    setFormData(prev => ({ ...prev, date: selectedDate }));
+  }, [selectedDate]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -53,18 +60,23 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.title || !formData.amount || !formData.category) {
       alert('Please fill in all fields');
       return;
     }
 
     try {
-      await axios.post(`${API_URL}/transactions`, {
+      // ✅ Ensure correct date is sent
+      const newTransaction = {
         ...formData,
-        amount: parseFloat(formData.amount)
-      });
-      
+        amount: parseFloat(formData.amount),
+        date: selectedDate
+      };
+
+      await axios.post(`${API_URL}/transactions`, newTransaction);
+
+      // Reset form but keep the same date
       setFormData({
         title: '',
         amount: '',
@@ -72,7 +84,7 @@ function App() {
         type: 'expense',
         date: selectedDate
       });
-      
+
       fetchTransactions();
       fetchSummary();
     } catch (error) {
@@ -97,7 +109,7 @@ function App() {
     <div className="App">
       <div className="container">
         <h1>Personal Finance Tracker</h1>
-        
+
         <div className="date-selector">
           <label>Select Date: </label>
           <input
@@ -185,8 +197,8 @@ function App() {
           ) : (
             <div className="transaction-items">
               {transactions.map(transaction => (
-                <div 
-                  key={transaction._id} 
+                <div
+                  key={transaction._id}
                   className={`transaction-item ${transaction.type}`}
                 >
                   <div className="transaction-info">
@@ -197,7 +209,7 @@ function App() {
                     <span className={transaction.type}>
                       {transaction.type === 'income' ? '+' : '-'}₹{transaction.amount.toFixed(2)}
                     </span>
-                    <button 
+                    <button
                       onClick={() => handleDelete(transaction._id)}
                       className="btn-delete"
                     >
