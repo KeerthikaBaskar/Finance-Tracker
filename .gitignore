@@ -1,0 +1,52 @@
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# Build outputs
+build/
+dist/
+.cache/
+.temp/
+
+# IDE and system files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Temporary files
+.tmp/
+*.tmp
+*.bak
+*.old
+
+# Catalyst or deployment folders
+.catalyst/
+functions/
+
+# Misc
+*.tgz
+*.zip
