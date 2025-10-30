@@ -266,3 +266,11 @@ form {
     justify-content: space-between;
   }
 }
+
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}

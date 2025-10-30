@@ -162,17 +162,26 @@ function App() {
               />
             </div>
 
-            <div className="form-group">
+           <div className="form-group">
               <label>Category</label>
-              <input
-                type="text"
+              <select
                 name="category"
                 value={formData.category}
                 onChange={handleInputChange}
-                placeholder="e.g., Food, Salary, Transport"
                 required
-              />
+              >
+                <option value="">Select Category</option>
+                <option value="Food">Food</option>
+                <option value="Outing">Outing</option>
+                <option value="Salary">Salary</option>
+                <option value="Travel">Travel</option>
+                <option value="Income Mom">Income Mom</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Mobile Recharge">Mobile Recharge</option>
+                <option value="Expense">Expense</option>
+              </select>
             </div>
+
 
             <div className="form-group">
               <label>Type</label>
